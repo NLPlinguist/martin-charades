@@ -118,7 +118,7 @@
     padding: 18px 56px;
     cursor: pointer;
     box-shadow: 0 8px 22px rgba(233, 79, 141, 0.35);
-    transition: transform .12s ease, box-shadow .12s ease;
+    transition: transform .12s ease, box-shadow .15s ease;
   }
   #nextBtn:hover { transform: scale(1.03); box-shadow: 0 12px 30px rgba(233, 79, 141, 0.45); }
   #nextBtn:active { transform: scale(0.98); }
@@ -169,6 +169,16 @@
         <span class="name">Wacky Random</span>
         <span class="count" data-count="wacky"></span>
       </button>
+      <button class="card" data-cat="toys">
+        <span class="emoji">🧸</span>
+        <span class="name">Toys</span>
+        <span class="count" data-count="toys"></span>
+      </button>
+      <button class="card" data-cat="plants">
+        <span class="emoji">🌻</span>
+        <span class="name">Plants & Food</span>
+        <span class="count" data-count="plants"></span>
+      </button>
       <button class="card" data-cat="family">
         <span class="emoji">👨‍👩‍👧</span>
         <span class="name">Family</span>
@@ -199,8 +209,8 @@ const kidsMovies = [
   "Finding Nemo", "Finding Dory", "Zootopia", "Frozen", "Frozen II",
   "Moana", "Moana 2", "Inside Out", "Inside Out 2",
   "Monsters Inc.", "Monsters University", "Brave", "WALL-E", "Up", "Ratatouille",
-  "The Incredibles", "Incredibles 2", "Luca", "CARS", "CARS 2",
-  "CARS 3", "Cars 4", "Cars: Lightning McQueen", "Coco", "Big Hero 6",
+  "The Incredibles", "Incredibles 2", "Luca", "Cars", "Cars 2",
+  "Cars 3", "Cars 4", "Coco", "Big Hero 6",
   "Elemental", "Turning Red", "Soul", "Onward", "Ponyo",
   "How to Train Your Dragon", "How to Train Your Dragon 2", "How to Train Your Dragon 3",
   "Shrek", "Shrek 2", "Shrek the Third", "Shrek Forever Ever",
@@ -245,10 +255,10 @@ const historyItems = [
   "The Civil Rights Movement", "The Vietnam War", "The Cuban Missile Crisis", "The Boston Tea Party", "The Underground Railroad",
   "The Emancipation Proclamation", "The Gettysburg Address", "The Constitution", "The First Moon Walk", "The Space Shuttle",
   "The International Space Station", "The Sinking of the Lusitania", "The Challenger Disaster", "The Halifax Explosion", "The Pilgrims",
-  "The American Frontier", "The Sinking of the Bismarck", "The Battle of Waterloo", "The Fall of Constantinople", "The Siege of Jerusalem",
-  "The 1906 San Francisco Earthquake", "The Great Storm", "The Sinking of the Bismarck", "The French Navy", "The American Navy",
-  "The Royal Navy", "The Continental Army", "The Union Army", "The Confederate Army", "The British Empire",
-  "The Spanish Empire", "The Ottoman Empire", "The Mongol Empire", "The Maya Civilization", "The Inca Empire"
+  "The American Frontier", "The Battle of Waterloo", "The Fall of Constantinople", "The Siege of Jerusalem",
+  "The 1906 San Francisco Earthquake", "The Continental Army", "The Union Army", "The Confederate Army",
+  "The British Empire", "The Spanish Empire", "The Ottoman Empire", "The Mongol Empire", "The Maya Civilization",
+  "The Inca Empire"
 ];
 
 const animals = [
@@ -274,34 +284,154 @@ const animals = [
   "Hummingbird", "Butterfly"
 ];
 
-const wackyAdjs = [
-  "Sneezing", "Dancing", "Floating", "Haunted", "Glowing", "Wobbly",
-  "Cosmic", "Magnetic", "Tiny", "Giant", "Bubbly", "Ninja",
-  "Wizard", "Robot", "Rocket", "Moon", "Cloud", "Crystal",
-  "Spicy", "Silent", "Bouncy", "Fuzzy", "Electric", "Sparkling"
+/* Wacky Random: general catch-all of things a kid could act out in charades */
+const wacky = [
+  "Rocket Ship", "Space Shuttle", "Astronaut", "Alien", "UFO",
+  "Time Machine", "Time Traveler", "Ghost", "Zombie", "Dragon",
+  "Pirate", "Knight", "Superhero", "Villain", "Wizard",
+  "Robot", "Dancing Robot", "Magic Carpet", "Magic Wand",
+  "Flying", "Teleporting", "Invisible Person", "Mind Reader", "Hypnotist",
+  "Spy", "Detective", "Treasure Hunt", "Treasure Chest",
+  "Sword Fight", "Parachute", "Hot Air Balloon", "Balloon",
+  "Bouncing Ball", "Catching a Ball", "Throwing a Ball",
+  "Hitting Home Run", "Skateboard Trick", "Stunt Bicycle",
+  "Trampoline", "Bouncy Castle", "Roller Coaster", "Ferris Wheel",
+  "Skiing", "Snowboarding", "Surfing", "Skating", "Rock Climbing",
+  "Camping", "Hiking", "Fishing", "Caving", "Pogo Stick",
+  "Bubble Machine", "Bubble Bath", "Water Balloon Fight", "Slime",
+  "Glitter Explosion", "Snowstorm", "Blizzard", "Volcano",
+  "Lightning Bolt", "Thunderstorm", "Meteor", "Comet",
+  "Tornado", "Hurricane", "Avalanche", "Earthquake",
+  "Iceberg", "Deep Sea Dive", "Octopus", "Squid Dance",
+  "Disco Dance", "Dance Off", "Dance Marathon", "Karaoke",
+  "Silly Song", "Singing", "Rapping", "Dancing", "Acting",
+  "Clown", "Juggling", "Tightrope Walking", "Backflips",
+  "Somersault", "Handstands", "Cartwheel", "Breakdancing",
+  "Pantomime", "Magic Show", "Drama", "Theater Performance",
+  "Sneezing", "Sneezing Contest", "Sneeze", "Silly Dance",
+  "Dance Party", "Singing Contest", "Karaoke Battle",
+  "Silly Charades", "Obstacle Course", "Floor is Lava",
+  "Swing Set", "Slide", "Jump Rope", "Hopscotch",
+  "Tag", "Hide and Seek", "Simon Says",
+  "Musical Chairs", "Four Square", "Kick the Can",
+  "Duck Duck Goose", "Red Light Green Light",
+  "Magic Show", "Hypnotist Show", "Silly Song",
+  "Piano Recital", "Drum Solo", "Guitar Solo",
+  "Opera Singer", "Bass Drum", "Trumpet",
+  "Horn Player", "Flute Player", "Violinist",
+  "Dancer", "Crown", "King",
+  "Queen", "Prince", "Princess",
+  "Ruler", "General", "Captain",
+  "Doctor", "Nurse", "Teacher",
+  "Firefighter", "Police Officer", "Astronaut Training",
+  "Moon Walk", "Spacewalk", "Zero Gravity",
+  "Comet Crash", "Rocket Launch", "Blast Off",
+  "Avalanche Rescue", "Ice Cave", "Snowman",
+  "Sandcastle Building", "Beach", "Vacation",
+  "Camping Trip", "Picnic", "BBQ",
+  "Dinner Party", "Birthday Party", "Wedding",
+  "Baby Shower", "Graduation", "Talent Show",
+  "Circus", "Jester", "Magician",
+  "Strongman", "Wrestler", "Boxer",
+  "Martial Artist", "Ninja", "Kung Fu",
+  "Yoga", "Meditation", "Breathing Exercise",
+  "Deep Breathing", "Loud Breathing", "Quiet Breathing",
+  "Whispering", "Shouting", "Crying",
+  "Laughing", "Singing", "Humming",
+  "Whistling", "Talking", "Mumbling",
+  "Giggling", "Snoring", "Sleeping",
+  "Waking Up", "Stretching", "Yawning",
+  "Hugging", "Kissing", "Pointing",
+  "Pointing at Moon", "Pointing at Sun", "Pointing at Tree",
+  "Pointing at House", "Pointing at Car", "Pointing at Dog",
+  "Pointing at Cat", "Pointing at Bird", "Pointing at Fish",
+  "Pointing at Flower", "Pointing at Star", "Pointing at Cloud"
 ];
-const wackyNouns = [
-  "Pickle", "Toaster", "Noodle", "Grandma", "Sandwich",
-  "Fish", "Broccoli", "Donut", "Penguin", "Hamster",
-  "Cookie", "Cake", "Marshmallow", "Rocket", "Balloon",
-  "Pillow", "Toothpaste", "Comet", "Disco", "Taco",
-  "Toast", "Whale", "Turtle", "Hopper", "Yoga", "Pizza"
+
+const toys = [
+  "Teddy Bear", "Hot Wheels", "LEGO", "Barbie", "Barbie Doll",
+  "Doll House", "Playmobil", "Board Game", "Card Game", "Monopoly",
+  "Scattergories", "Catan", "Risk", "Clue", "Ticket to Ride",
+  "Sorry!", "Battleship", "Chutes and Ladders", "Operation", "Twister",
+  "Uno", "Building Blocks", "Construction Toy", "LEGO Set", "LEGO Castle",
+  "LEGO Car", "LEGO Train", "LEGO Spaceship", "LEGO Robot",
+  "Lego City", "Lego Star Wars", "LEGO Harry Potter", "LEGO Marvel",
+  "Action Figure", "Toy Robot", "Doll", "Action Doll",
+  "Dollhouse", "Dollhouse Kitchen", "Pretend Play", "Pretend Kitchen",
+  "Pretend Phone", "Plushie", "Plush Toy", "Stuffed Animal",
+  "Hug Bug", "Rubber Duck", "Rubber Chicken", "Rubber Ball",
+  "Tricycle", "Scooter", "Skateboard", "Kite",
+  "Yo-Yo", "Yo-Yo Trick", "Marbles", "Marbles Game",
+  "Pinball", "Pinball Machine", "Arcade Game", "Video Game",
+  "Video Game Controller", "Joystick", "Game Console", "GamePad",
+  "Playstation", "Xbox", "Nintendo", "Switch", "Game Boy",
+  "Nintendo Switch", "Mario Kart", "Minecraft", "Fortnite",
+  "Roblox", "Animal Crossing", "Zelda", "Pokemon",
+  "Pokemon Card", "Pokemon Game", "Trading Cards", "Frisbee",
+  "Frisbee Toss", "Hula Hoop", "Hula Hoop Dance", "Slingshot",
+  "Toy Hammer", "Toy Wrench", "Toy Toolbox", "Toy Screwdriver",
+  "Toy Truck", "Toy Car", "Pull String Car", "Pull String Dog",
+  "Pull String Horse", "Pull String Cat", "Push Button Car",
+  "Pull String Truck", "Remote Control Car", "Remote Control Helicopter",
+  "RC Car", "RC Plane", "RC Drone", "Drone",
+  "Model Airplane", "Model Train", "Model Boat", "Train Set",
+  "Model Railroad", "Slot Car", "Slot Car Race", "Slot Car Track",
+  "Construction Set", "Pretend Construction", "Pretend Toolbox",
+  "Hasbro", "Mattel", "Fisher-Price", "Hasbro Games",
+  "Red Dead Redemption", "Animal Cross"
+];
+
+/* Plants & Food: fruits, vegetables, trees, flowers, and plants */
+const plants = [
+  // Fruits
+  "Apple", "Orange", "Banana", "Grape", "Mango",
+  "Peach", "Pear", "Plum", "Cherry", "Strawberry",
+  "Blueberry", "Raspberry", "Blackberry", "Watermelon", "Melon",
+  "Cantaloupe", "Kiwi", "Pineapple", "Lemon", "Lime",
+  "Avocado", "Coconut", "Papaya", "Pomegranate", "Lychee",
+  "Dragon Fruit", "Apricot", "Date", "Fig", "Guava",
+  // Vegetables
+  "Starfruit", "Carrot", "Broccoli", "Cabbage", "Spinach",
+  "Kale", "Lettuce", "Cucumber", "Tomato", "Potato",
+  "Sweet Potato", "Corn", "Peas", "Bean",
+  "Green Bean", "Pea Pod", "Brussels Sprouts", "Cauliflower", "Zucchini",
+  "Butternut Squash", "Pumpkin", "Radish", "Beet",
+  "Beetroot", "Celery", "Asparagus", "Mushroom", "Eggplant",
+  "Okra", "Artichoke", "Leek", "Onion", "Garlic",
+  "Fennel", "Turnip", "Yam", "Pepper",
+  // Trees
+  "Carrot Tree", "Apple Tree", "Mango Tree", "Palm Tree",
+  "Oak Tree", "Pine Tree", "Maple Tree", "Willow Tree",
+  "Birch Tree", "Cedar Tree", "Elm Tree", "Poplar Tree",
+  "Cherry Tree", "Redwood Tree", "Juniper Tree", "Sage Tree",
+  "Bamboo Tree", "Giant Tree", "Tree", "Treehouse",
+  "Treehouse Climbing", "Treehouse Building", "Tree Climbing", "Tree House",
+  // Flowers
+  "Rose", "Tulip", "Sunflower", "Daisy", "Lily",
+  "Orchid", "Peony", "Dahlia", "Lotus", "Violet",
+  "Marigold", "Hibiscus", "Chrysanthemum", "Lavender", "Pansy",
+  "Iris", "Zinnia", "Begonia", "Camellia", "Magnolia",
+  "Gardenia", "Lilac", "Fuchsia",
+  // Other plants
+  "Cactus", "Succulent", "Fern", "Moss", "Algae",
+  "Kelp", "Vine", "Vine Plant", "Tree Fern", "Monstera",
+  "Snake Plant", "Spider Plant", "Pothos", "Aloe Vera",
+  "Bonsai", "Rosemary", "Mint", "Basil", "Oregano",
+  "Thyme", "Pepper Plant", "Sage Plant", "Chive",
+  "Herb Garden", "Garden", "Gardening", "Planting Seeds",
+  "Watering Plants", "Flower Garden", "Flower Bed"
 ];
 
 const family = ["Mom", "Dad", "Wade", "Joyce", "Mabel", "Barry", "Cash", "Noah"];
 
-/* Build the wacky combos (24 x 26 = 624 options) */
-const wacky = [];
-for (const a of wackyAdjs) {
-  for (const n of wackyNouns) wacky.push(a + " " + n);
-}
-
 const categories = {
-  all: kidsMovies.concat(historyItems, animals, wacky, family),
+  all: kidsMovies.concat(historyItems, animals, wacky, toys, plants, family),
   kids: kidsMovies,
   history: historyItems,
   animals: animals,
   wacky: wacky,
+  toys: toys,
+  plants: plants,
   family: family
 };
 
@@ -311,6 +441,8 @@ const catNames = {
   history: "History",
   animals: "Animals",
   wacky: "Wacky Random",
+  toys: "Toys",
+  plants: "Plants & Food",
   family: "Family"
 };
 
